@@ -6,9 +6,7 @@ import com.na.alkemy.service.MoviesService;
 import com.na.alkemy.util.GeneralBodyResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -34,6 +32,30 @@ public class MoviesController {
                 return new ResponseEntity<>(new GeneralBodyResponse<>(moviesDto, "created", null), HttpStatus.OK);
             else
                 return new ResponseEntity<>(new GeneralBodyResponse<>(null, "not created", null), HttpStatus.BAD_REQUEST);
+
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new GeneralBodyResponse<>(null, ex.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("movies")
+    public ResponseEntity<GeneralBodyResponse<MoviesDto>> update(@Valid @RequestBody MoviesForm moviesForm) {
+        try {
+            MoviesDto moviesDto = this.moviesService.update(moviesForm);
+
+            return new ResponseEntity<>(new GeneralBodyResponse<>(moviesDto, "update", null), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new GeneralBodyResponse<>(null, ex.getMessage(), null), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("movies/{id}")
+    public ResponseEntity<GeneralBodyResponse<Boolean>> delete(@PathVariable Integer id) {
+        try {
+            if (this.moviesService.delete(id))
+                return new ResponseEntity<>(new GeneralBodyResponse<>(true, "delete ok", null), HttpStatus.OK);
+            else
+                return new ResponseEntity<>(new GeneralBodyResponse<>(false, "not delete", null), HttpStatus.BAD_REQUEST);
 
         } catch (Exception ex) {
             return new ResponseEntity<>(new GeneralBodyResponse<>(null, ex.getMessage(), null), HttpStatus.BAD_REQUEST);

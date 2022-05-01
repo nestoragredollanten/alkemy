@@ -10,8 +10,8 @@ import com.na.alkemy.payload.MoviesForm;
  */
 public interface MoviesService {
     MoviesDto create(MoviesForm moviesForm);
-
     MoviesDto update(MoviesForm moviesForm);
-
     boolean delete(Integer id);
+
+    MoviesDto findById(Integer id);
 }
